@@ -82,6 +82,20 @@ def set_framework(name):
     _KERAS_MODELS = keras.models
     _KERAS_UTILS = keras.utils
     _KERAS_LOSSES = keras.losses
+    
+    # add int_shape to keras backend
+    if not hasattr(_KERAS_BACKEND, 'int_shape'):
+        def int_shape(x):
+            return x.shape
+
+        _KERAS_BACKEND.int_shape = int_shape
+    
+    # add sigmoid to keras backend
+    if not hasattr(_KERAS_BACKEND, 'sigmoid'):
+        def sigmoid(x):
+            return keras.activations.sigmoid(x)
+
+        _KERAS_BACKEND.sigmoid = sigmoid
 
     # allow losses/metrics get keras submodules
     base.KerasObject.set_submodules(
